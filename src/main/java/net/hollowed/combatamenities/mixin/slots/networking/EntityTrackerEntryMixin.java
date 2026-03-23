@@ -1,6 +1,7 @@
 package net.hollowed.combatamenities.mixin.slots.networking;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.hollowed.combatamenities.config.CAConfig;
 import net.hollowed.combatamenities.networking.slots.SlotClientPacketPayload;
 import net.hollowed.combatamenities.networking.slots.SoundPacketPayload;
 import net.minecraft.server.level.ServerEntity;
@@ -89,8 +90,10 @@ public class EntityTrackerEntryMixin {
         // Send the back slot item (or an empty item stack if it's empty)
         ServerPlayNetworking.send(recipient,
                 new SlotClientPacketPayload(sourcePlayer.getId(), 41, backSlotItem.isEmpty() ? ItemStack.EMPTY : backSlotItem));
-        ServerPlayNetworking.send(recipient,
-                new SlotClientPacketPayload(sourcePlayer.getId(), 42, sourcePlayer.getInventory().getItem(42).isEmpty() ? ItemStack.EMPTY : sourcePlayer.getInventory().getItem(42)));
+        if (CAConfig.enableBeltSlot) {
+            ServerPlayNetworking.send(recipient,
+                    new SlotClientPacketPayload(sourcePlayer.getId(), 42, sourcePlayer.getInventory().getItem(42).isEmpty() ? ItemStack.EMPTY : sourcePlayer.getInventory().getItem(42)));
+        }
     }
 
     // Detect landing based on velocity history

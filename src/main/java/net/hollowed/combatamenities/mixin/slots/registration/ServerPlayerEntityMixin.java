@@ -2,6 +2,7 @@ package net.hollowed.combatamenities.mixin.slots.registration;
 
 import com.mojang.authlib.GameProfile;
 import net.hollowed.combatamenities.CombatAmenities;
+import net.hollowed.combatamenities.config.CAConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
@@ -77,8 +78,10 @@ public abstract class ServerPlayerEntityMixin extends Player {
         if (!this.getInventory().getItem(41).isEmpty()) {
             this.getInventory().getItem(41).inventoryTick(this.level(), this, null);
         }
-        if (!this.getInventory().getItem(42).isEmpty()) {
-            this.getInventory().getItem(42).inventoryTick(this.level(), this, null);
+        if (CAConfig.enableBeltSlot) {
+            if (!this.getInventory().getItem(42).isEmpty()) {
+                this.getInventory().getItem(42).inventoryTick(this.level(), this, null);
+            }
         }
     }
 }

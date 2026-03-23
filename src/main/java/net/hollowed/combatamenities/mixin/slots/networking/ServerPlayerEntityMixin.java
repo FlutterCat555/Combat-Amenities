@@ -3,6 +3,7 @@ package net.hollowed.combatamenities.mixin.slots.networking;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.hollowed.combatamenities.config.CAConfig;
 import net.hollowed.combatamenities.networking.slots.SlotClientPacketPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,16 +51,17 @@ public abstract class ServerPlayerEntityMixin extends Player {
                 Collection<ServerPlayer> players = PlayerLookup.tracking(this.level(), this.blockPosition());
                 players.forEach(player -> ServerPlayNetworking.send(player, payload));
             }
+            if (CAConfig.enableBeltSlot) {
+                // Check if the current back slot stack is different from the saved one
+                if (!ItemStack.isSameItem(beltSlotStack, currentBeltSlotStack)) {
+                    // Update the back slot stack to the current one
+                    beltSlotStack = currentBeltSlotStack.copy();
 
-            // Check if the current back slot stack is different from the saved one
-            if (!ItemStack.isSameItem(beltSlotStack, currentBeltSlotStack)) {
-                // Update the back slot stack to the current one
-                beltSlotStack = currentBeltSlotStack.copy();
-
-                // Create a new payload with the current back slot stack
-                SlotClientPacketPayload payload = new SlotClientPacketPayload(this.getId(), 42, beltSlotStack);
-                Collection<ServerPlayer> players = PlayerLookup.tracking(this.level(), this.blockPosition());
-                players.forEach(player -> ServerPlayNetworking.send(player, payload));
+                    // Create a new payload with the current back slot stack
+                    SlotClientPacketPayload payload = new SlotClientPacketPayload(this.getId(), 42, beltSlotStack);
+                    Collection<ServerPlayer> players = PlayerLookup.tracking(this.level(), this.blockPosition());
+                    players.forEach(player -> ServerPlayNetworking.send(player, payload));
+                }
             }
         }
     }

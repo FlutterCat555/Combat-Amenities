@@ -55,37 +55,39 @@ public abstract class HudRendererMixin {
 
     @Unique
     private void renderBeltSlot(GuiGraphics drawContext, DeltaTracker tickCounter) {
-        Player playerEntity = Minecraft.getInstance().player;
-        if (playerEntity != null) {
-            ItemStack beltSlotStack = playerEntity.getInventory().getItem(42);
+        if (CAConfig.enableBeltSlot) {
+            Player playerEntity = Minecraft.getInstance().player;
+            if (playerEntity != null) {
+                ItemStack beltSlotStack = playerEntity.getInventory().getItem(42);
 
-            if (!ItemStack.matches(beltSlotStack, lastBeltSlotStack) && beltAnimationTicks == 0) {
-                lastBeltSlotStack = beltSlotStack.copy();
-                if (beltSlotStack.getOrDefault(CAComponents.STRING_PROPERTY, "").equals("bob5")) {
-                    beltAnimationTicks = 5;
+                if (!ItemStack.matches(beltSlotStack, lastBeltSlotStack) && beltAnimationTicks == 0) {
+                    lastBeltSlotStack = beltSlotStack.copy();
+                    if (beltSlotStack.getOrDefault(CAComponents.STRING_PROPERTY, "").equals("bob5")) {
+                        beltAnimationTicks = 5;
+                    }
                 }
-            }
 
-            if (beltSlotStack.getOrDefault(CAComponents.STRING_PROPERTY, "").equals("bob5")) {
-                beltSlotStack.remove(CAComponents.STRING_PROPERTY);
-            }
+                if (beltSlotStack.getOrDefault(CAComponents.STRING_PROPERTY, "").equals("bob5")) {
+                    beltSlotStack.remove(CAComponents.STRING_PROPERTY);
+                }
 
-            if (!beltSlotStack.isEmpty()) {
-                final int x = getBeltX(drawContext);
-                int y = drawContext.guiHeight() - CAConfig.backslotY - 4;
+                if (!beltSlotStack.isEmpty()) {
+                    final int x = getBeltX(drawContext);
+                    int y = drawContext.guiHeight() - CAConfig.backslotY - 4;
 
-                RenderSystem.assertOnRenderThread();
-                GlStateManager._enableBlend();
+                    RenderSystem.assertOnRenderThread();
+                    GlStateManager._enableBlend();
 
-                drawContext.blit(
-                        RenderPipelines.GUI_TEXTURED,
-                        WIDGETS_TEXTURE,
-                        x + 1, y - 19,
-                        0, 0, 22, 23, 29, 24
-                );
+                    drawContext.blit(
+                            RenderPipelines.GUI_TEXTURED,
+                            WIDGETS_TEXTURE,
+                            x + 1, y - 19,
+                            0, 0, 22, 23, 29, 24
+                    );
 
-                // Render the back slot item
-                renderItem(drawContext, x + 4, y - 15, tickCounter, playerEntity, beltSlotStack, beltAnimationTicks);
+                    // Render the back slot item
+                    renderItem(drawContext, x + 4, y - 15, tickCounter, playerEntity, beltSlotStack, beltAnimationTicks);
+                }
             }
         }
     }

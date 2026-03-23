@@ -1,5 +1,6 @@
 package net.hollowed.combatamenities.mixin.slots.registration;
 
+import net.hollowed.combatamenities.config.CAConfig;
 import net.hollowed.combatamenities.index.CAKeyBindings;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
@@ -33,10 +34,11 @@ public abstract class HandledScreenMixin<T extends AbstractContainerMenu> {
                 ci.cancel();
                 return;
             }
-
-            if (CAKeyBindings.beltSlotBinding.matchesMouse(click)) {
-                this.slotClicked(this.hoveredSlot, this.hoveredSlot.index, 42, ClickType.SWAP);
-                ci.cancel();
+            if (CAConfig.enableBeltSlot) {
+                if (CAKeyBindings.beltSlotBinding.matchesMouse(click)) {
+                    this.slotClicked(this.hoveredSlot, this.hoveredSlot.index, 42, ClickType.SWAP);
+                    ci.cancel();
+                }
             }
         }
     }

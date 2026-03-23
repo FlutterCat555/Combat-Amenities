@@ -1,5 +1,6 @@
 package net.hollowed.combatamenities.mixin.slots.rendering;
 
+import net.hollowed.combatamenities.config.CAConfig;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -34,11 +35,13 @@ public abstract class InventoryScreenMixin extends AbstractRecipeBookScreen<@Not
                 this.leftPos + 76, this.topPos + 7,
                 0, 0, 18, 18, 18, 18 // Texture coordinates and dimensions
         );
-        context.blit(
-                RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND,
-                SLOT_TEXTURE,
-                this.leftPos + 76, this.topPos + 25,
-                0, 0, 18, 18, 18, 18 // Texture coordinates and dimensions
-        );
+        if (CAConfig.enableBeltSlot) {
+            context.blit(
+                    RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND,
+                    SLOT_TEXTURE,
+                    this.leftPos + 76, this.topPos + 25,
+                    0, 0, 18, 18, 18, 18 // Texture coordinates and dimensions
+            );
+        }
     }
 }

@@ -3,6 +3,7 @@ package net.hollowed.combatamenities.mixin.slots.registration;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.hollowed.combatamenities.config.CAConfig;
 import net.hollowed.combatamenities.networking.slots.SlotCreativeClientPacketPayload;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -52,13 +53,15 @@ public abstract class CACreativeInventoryScreenMixin extends AbstractContainerSc
                     accessor.setY(20);   // Update Y position
                 }
             }
-            if (i == 47) {  // Modify slot 46
-                Slot slot = this.menu.slots.get(i);
+            if (CAConfig.enableBeltSlot) {
+                if (i == 47) {  // Modify slot 46
+                    Slot slot = this.menu.slots.get(i);
 
-                // Use the accessor to modify the final x and y fields
-                if (slot instanceof SlotAccessor accessor) {
-                    accessor.setX(145);  // Update X position
-                    accessor.setY(20);   // Update Y position
+                    // Use the accessor to modify the final x and y fields
+                    if (slot instanceof SlotAccessor accessor) {
+                        accessor.setX(145);  // Update X position
+                        accessor.setY(20);   // Update Y position
+                    }
                 }
             }
         }
@@ -73,12 +76,14 @@ public abstract class CACreativeInventoryScreenMixin extends AbstractContainerSc
                     this.leftPos + 126, this.topPos + 19,
                     0, 0, 18, 18, 18, 18 // Texture coordinates and dimensions
             );
-            context.blit(
-                    RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND,
-                    SLOT_TEXTURE,
-                    this.leftPos + 144, this.topPos + 19,
-                    0, 0, 18, 18, 18, 18 // Texture coordinates and dimensions
-            );
+            if (CAConfig.enableBeltSlot) {
+                context.blit(
+                        RenderPipelines.GUI_OPAQUE_TEXTURED_BACKGROUND,
+                        SLOT_TEXTURE,
+                        this.leftPos + 144, this.topPos + 19,
+                        0, 0, 18, 18, 18, 18 // Texture coordinates and dimensions
+                );
+            }
         }
     }
 
@@ -91,8 +96,10 @@ public abstract class CACreativeInventoryScreenMixin extends AbstractContainerSc
                 if (i == 46) {  // Modify slot 46
                     ClientPlayNetworking.send(new SlotCreativeClientPacketPayload(41, this.menu.slots.get(i).getItem()));
                 }
-                if (i == 47) {  // Modify slot 47
-                    ClientPlayNetworking.send(new SlotCreativeClientPacketPayload(42, this.menu.slots.get(i).getItem()));
+                if (CAConfig.enableBeltSlot) {
+                    if (i == 47) {  // Modify slot 47
+                        ClientPlayNetworking.send(new SlotCreativeClientPacketPayload(42, this.menu.slots.get(i).getItem()));
+                    }
                 }
             }
         }

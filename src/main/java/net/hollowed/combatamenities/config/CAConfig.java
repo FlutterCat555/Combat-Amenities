@@ -20,4 +20,5 @@ public class CAConfig extends MidnightConfig {
     @Entry public static int shieldParryTime = 5;
     @Entry public static boolean enderPearlTweaks = true;
     @Entry public static boolean bowTweaks = true;
+    @Entry public static boolean enableBeltSlot = true;
 }

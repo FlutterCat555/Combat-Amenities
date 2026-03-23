@@ -60,29 +60,30 @@ public abstract class SlotsMixin extends RecipeBookMenu {
                 super.setByPlayer(stack);
             }
         });
-
-        // Add Belt Slot at determined position
-        this.addSlot(new Slot(inventory, 42, xPos1, yPos1) {
-            @Override
-            public Identifier getNoItemIcon() {
-                return Identifier.withDefaultNamespace("beltslot_overlay");
-            }
-
-            @Override
-            public @NotNull ItemStack remove(int amount) {
-                ItemStack stack = super.remove(amount);
-                if (stack.isEmpty()) {
-                    this.setByPlayer(ItemStack.EMPTY);
+        if (CAConfig.enableBeltSlot) {
+            // Add Belt Slot at determined position
+            this.addSlot(new Slot(inventory, 42, xPos1, yPos1) {
+                @Override
+                public Identifier getNoItemIcon() {
+                    return Identifier.withDefaultNamespace("beltslot_overlay");
                 }
-                return stack;
-            }
 
-            @Override
-            public void setByPlayer(@NotNull ItemStack stack) {
-                playSound(owner, stack);
-                super.setByPlayer(stack);
-            }
-        });
+                @Override
+                public @NotNull ItemStack remove(int amount) {
+                    ItemStack stack = super.remove(amount);
+                    if (stack.isEmpty()) {
+                        this.setByPlayer(ItemStack.EMPTY);
+                    }
+                    return stack;
+                }
+
+                @Override
+                public void setByPlayer(@NotNull ItemStack stack) {
+                    playSound(owner, stack);
+                    super.setByPlayer(stack);
+                }
+            });
+        }
     }
 
     @Unique
